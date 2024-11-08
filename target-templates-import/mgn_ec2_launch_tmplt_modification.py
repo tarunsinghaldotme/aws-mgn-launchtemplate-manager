@@ -144,7 +144,9 @@ def update_launch_config(general_launch_settings, launchTemplateVersion, sourceS
         if 'Placement' not in newEc2Launchtemplate['LaunchTemplateData']:
             newEc2Launchtemplate['LaunchTemplateData']['Placement'] = {}
         newEc2Launchtemplate['LaunchTemplateData']['Placement']['Tenancy'] = row['Tenancy']
-        newEc2Launchtemplate['LaunchTemplateData']['Placement']['Affinity'] = 'default'
+        newEc2Launchtemplate['LaunchTemplateData']['Placement'].pop('Affinity', None)
+        if newEc2Launchtemplate['LaunchTemplateData']['Placement']['Tenancy'] == 'host':
+            newEc2Launchtemplate['LaunchTemplateData']['Placement']['Affinity'] = 'default'
         if newEc2Launchtemplate['LaunchTemplateData']['Placement']['Tenancy'] == 'default' or newEc2Launchtemplate['LaunchTemplateData']['Placement']['Tenancy'] == 'dedicated':
             newEc2Launchtemplate['LaunchTemplateData']['Placement'].pop('HostId', None)
             newEc2Launchtemplate['LaunchTemplateData']['Placement'].pop('HostResourceGroupArn', None)
